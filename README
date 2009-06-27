@@ -1,0 +1,107 @@
+NAME
+     Net::Twitter::Antispam - Making Twitter usable
+
+NOTE
+    This is an alpha-level module, it lacks tests, it may break, on your own
+    head be it.
+
+    But don't let that put you off contributing modules.
+
+VERSION
+     Version 0.01
+
+SYNOPSIS
+     use Net::Twitter::Antispam;
+
+     my $spam = Net::Twitter::Antispam->new(username=>'foo',password=>'bar', active_plugins => [
+         'Example', # Example module that ships with N::T::A, counters a previous spam attack
+         'LessThan20', #Hypothetical other module that regards people with less than 20 tweets as spam
+     ];
+
+     # Gets a Net::Twitter
+     my $t = $spam->twitter;
+     foreach my $follower (@{$t->followers}) {
+         say "Spammer: " . $follower->{screen_name} if $spam->is_user_spammy($follower);
+         # You have the full power of Net::Twitter, but I'd question whether auto-blocking is a good strategy ;)
+     }
+
+FUNCTIONS
+  new
+    Constructs the object, Moose-style. Required attributes: username,
+    password, active_plugins
+
+  is_message_spammy (Str) => Bool
+    Runs all active message plugins, gets the mean and returns whether that
+    is over 50%
+
+  is_user_spammy (HashRef) => Bool
+    Runs all active user plugins, gets the mean and returns whether that is
+    over 50%
+
+  run_plugin ( $plugin_sub_name :: Str, $plugin_name :: Str, Array )
+    The array at the end (not a ref!) contains args to pass to the plugin.
+    For message plugins, it should get the message body. For user plugins it
+    should get the user hashref returned from Net::Twitter.
+
+    Useful if your plugin depends on the result of other plugins.
+
+    e.g. run_plugin('is_message_spammy','ContextFreeLinks',$message);
+
+MEMBER VARIABLES
+  twitter :: Net::Twitter
+  username :: Str
+    Your twitter username
+
+  password :: Str
+    Your twitter password
+
+  active_plugins :: ArrayRef
+    List of plugins (without the Net::Twitter::Antispam::Plugin:: prefix)
+    that you want to activate
+
+AUTHOR
+    James Laver, "<sprintf(qw(%s@%s.%s cpan jameslaver com))>"
+
+SEE ALSO
+    Net::Twitter - This wraps part of the API, you'll want to know how to
+    work it. Net::Twitter::Antispam::Plugin::Example - An example plugin
+    that blocks a previous twitter spam tactic.
+
+BUGS
+    Please report any bugs or feature requests to "bug-net-twitter-antispam
+    at rt.cpan.org", or through the web interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Net-Twitter-Antispam>. I
+    will be notified, and then you'll automatically be notified of progress
+    on your bug as I make changes.
+
+SUPPORT
+    *   RT: CPAN's request tracker
+
+        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-Twitter-Antispam>
+
+    *   AnnoCPAN: Annotated CPAN documentation
+
+        <http://annocpan.org/dist/Net-Twitter-Antispam>
+
+PATCHES WELCOME
+    As stated this is alpha software. If you find a bug, please fix it in
+    github and send me a message letting me know i need to merge it.
+
+    If you want a feature, the API is stupidly easy, you can probably write
+    it easily.
+
+    Source is on github: <http://github.com/jjl/Net-Twitter-Antispam> IRC:
+    elpenguin @ irc.perl.org#net-twitter (if I'm not there, I'm probably in
+    #london.pm)
+
+ACKNOWLEDGEMENTS
+    An anti-thankyou to all of the twitter spammers who made me write this.
+    A thankyou to various #london.pm members who've shown enthusiasm about
+    the project.
+
+COPYRIGHT & LICENSE
+    Copyright 2009 James Laver, all rights reserved.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+

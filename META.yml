@@ -1,0 +1,23 @@
+---
+name: Net-Twitter-Antispam
+version: 0.02
+author:
+  - 'James Laver <sprintf(qw(%s@%s.%s cpan jameslaver com))>'
+abstract: 'Twitter has been getting more an more full of Spam. Enough is enough, lets make it readable again.'
+license: perl
+resources:
+  license: ~
+build_requires:
+  Test::More: 0
+provides:
+  Net::Twitter::Antispam:
+    file: lib/Net/Twitter/Antispam.pm
+    version: 0.02
+  Net::Twitter::Antispam::Plugin::ContextFreeLinks:
+    file: lib/Net/Twitter/Antispam/Plugin/ContextFreeLinks.pm
+  Net::Twitter::Antispam::Plugin::Example:
+    file: lib/Net/Twitter/Antispam/Plugin/Example.pm
+generated_by: Module::Build version 0.32
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
